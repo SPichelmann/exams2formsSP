@@ -1,6 +1,17 @@
 forms_string <- function(answer, width = NULL, usecase = TRUE, usespace = FALSE, regex = FALSE, obfuscate = TRUE) {
   ## sanity checks
   answer <- as.character(unlist(answer))
+  answer <- unlist(
+    lapply(answer, function(x) {
+      if (grepl(";;;", x, fixed = TRUE)) {
+        strsplit(x, ";;;", fixed = TRUE)[[1]]
+      } else {
+        x
+      }
+    }),
+    use.names = FALSE
+  )
+  
   stopifnot(
     "'answer' must be of length > 0" = length(answer) > 0,
     "missing values in 'answer' not allowed" = all(!is.na(answer)),
